@@ -7,9 +7,13 @@ const years = document.querySelector('#years');
 const monthlyPayment = document.querySelector('#monthly-payment');
 const totalPayment = document.querySelector('#total-payment');
 const totalInterest = document.querySelector('#total-interest');
+const loader = document.querySelector('#loading');
+const result = document.querySelector('#results');
 
 // * showError Function
 const showError = (error) => {
+	result.style.display = 'none';
+	loader.style.display = 'none';
 	// Get elements
 	const card = document.querySelector('.card');
 	const heading = document.querySelector('.heading');
@@ -29,7 +33,7 @@ const showError = (error) => {
 };
 
 // * CalculateResult Function
-const calculateResult = (e) => {
+const calculateResult = () => {
 	const principal = parseFloat(amount.value);
 
 	// Here first we convert the interest from percent to decimal, then anual rate to monthly rate.
@@ -50,13 +54,20 @@ const calculateResult = (e) => {
 		totalInterest.value = (monthly * calculatedPayment - principal).toFixed(
 			2
 		);
+		result.style.display = 'block';
+		loader.style.display = 'none';
 	} else {
 		showError('Please Check your numbers');
 	}
-	e.preventDefault();
 };
 
 // * adding event to the Submit Button
-document
-	.querySelector('#loan-form')
-	.addEventListener('submit', calculateResult);
+document.querySelector('#loan-form').addEventListener('submit', (e) => {
+	// Hide the result
+	result.style.display = 'none';
+	// Show loader
+	loader.style.display = 'block';
+
+	setTimeout(calculateResult, 2000);
+	e.preventDefault();
+});
